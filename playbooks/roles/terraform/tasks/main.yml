@@ -4,6 +4,7 @@
 - name: Create resources by Terafform
   terraform:
     project_path: './roles/terraform/files/'
+    force_init: yes
     state: present
   register: terraform
 

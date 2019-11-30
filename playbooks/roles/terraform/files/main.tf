@@ -19,6 +19,14 @@ variable "server_count" {
     }
 }
 
+variable "key_name" {
+    default = "sshkey_for_ansible"
+}
+
+variable "public_key_path" {
+    default = "~/.ssh/id_rsa.pub"
+}
+
 provider "aws" {
     access_key = var.access_key
     secret_key = var.secret_key
@@ -28,6 +36,11 @@ provider "aws" {
 resource "aws_security_group" "score_hub_sg" {
     name = "score_hub"
     description = "security group for scoreHub platform"
+}
+
+resource "aws_key_pair" "auth" {
+    key_name = var.key_name
+    public_key = file(var.public_key_path)
 }
 
 resource "aws_security_group_rule" "inbound_ssh" {
@@ -74,7 +87,7 @@ resource "aws_instance" "manager_server" {
     count = var.server_count.manager_server
     ami   = var.images.amazon_linux2
     instance_type = "t2.micro"
-    key_name = "scorehub"
+    key_name = "${aws_key_pair.auth.id}"
     vpc_security_group_ids = ["${aws_security_group.score_hub_sg.id}"]
     associate_public_ip_address = "true"
 
@@ -87,7 +100,7 @@ resource "aws_instance" "application_server" {
     count = var.server_count.application_server
     ami   = var.images.amazon_linux2
     instance_type = "t2.micro"
-    key_name = "scorehub"
+    key_name = "${aws_key_pair.auth.id}"
     vpc_security_group_ids = ["${aws_security_group.score_hub_sg.id}"]
     associate_public_ip_address = "true"
 
