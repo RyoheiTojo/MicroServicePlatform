@@ -4,3 +4,26 @@
   gather_facts: no
   roles:
     - terraform
+
+- name: Waiting for upcoming ssh
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+  - debug:
+      msg: "{{ item }}"
+    with_inventory_hostnames:
+      - all
+
+  - wait_for:
+      host: "{{ item }}"
+      port: 22
+      state: started
+    with_inventory_hostnames:
+      - all
+
+- name: Setup Infra Common Setting
+  hosts: all
+  become: yes
+  roles:
+    - infra 

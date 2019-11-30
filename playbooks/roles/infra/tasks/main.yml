@@ -3,16 +3,10 @@
 
 - name: Assign hostname
   hostname:
-    name: "{{ ec2_tag_Name }}"
+    name: "{{ group_names | select('match', '^name_.*') | list | first | regex_replace('^name_', '') }}"
 
 - name: Update to latest
   yum:
     name: '*'
     state: latest
-
-- name: Add ssh public key
-  authorized_key:
-    user: centos
-    key: "{{ lookup('file', 'sshkey.pub') }}"
-    state: present
 
