@@ -1,0 +1,6 @@
+- name: Terraform AWS server
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  roles:
+    - terraform

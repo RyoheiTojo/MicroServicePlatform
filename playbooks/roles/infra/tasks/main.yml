@@ -1,0 +1,18 @@
+---
+# tasks file for terraform
+
+- name: Assign hostname
+  hostname:
+    name: "{{ ec2_tag_Name }}"
+
+- name: Update to latest
+  yum:
+    name: '*'
+    state: latest
+
+- name: Add ssh public key
+  authorized_key:
+    user: centos
+    key: "{{ lookup('file', 'sshkey.pub') }}"
+    state: present
+

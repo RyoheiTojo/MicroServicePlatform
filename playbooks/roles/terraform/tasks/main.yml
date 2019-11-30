@@ -1,0 +1,22 @@
+---
+# tasks file for terraform
+
+- name: Create resources by Terafform
+  terraform:
+    project_path: './roles/terraform/files/'
+    state: present
+  register: terraform
+
+- name: Execute EC2 dynamic inventory script
+  script: inventory/ec2.py --refresh-cache
+  when: terraform.changed
+
+- name: Refresh inventory
+  meta: refresh_inventory
+
+- name: Waiting for upcoming ssh
+  wait_for:
+    host: "{{ item }}"
+    port: 22
+    state: started
+  loop: "{{ groups['security_group_topix20190301'] }}"
