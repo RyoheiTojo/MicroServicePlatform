@@ -3,8 +3,6 @@
 tf_dir="`dirname $0`"
 tf_file="`dirname $0`/terraform.tfstate"
 
-echo ${tf_file}
-
 if [ ! -e ${tf_file} ]; then
   echo '{"all": {"hosts": ["localhost"]}}'
   exit 0
