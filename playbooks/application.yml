@@ -1,5 +1,5 @@
-- name: Setup Management Servers
-  hosts: manager_server
+- name: Setup Application Servers
+  hosts: application_server
   become: yes
   tasks:
     - debug:
@@ -7,6 +7,6 @@
   roles:
     - role: docker
     - role: consul
-      consul_server: True
+      consul_server: False
     - role: nomad
-      nomad_server: True
+      nomad_server: False
