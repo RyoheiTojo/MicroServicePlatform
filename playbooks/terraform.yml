@@ -13,11 +13,6 @@
     - name: Refresh Inventory
       meta: refresh_inventory
 
-    - debug:
-        msg: "{{ item }} in processing"
-      with_inventory_hostnames:
-        - all
-
     - wait_for:
         host: "{{ item }}"
         port: 22
