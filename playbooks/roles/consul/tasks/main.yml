@@ -10,7 +10,6 @@
     mode: 0755
   with_dict: "{{ consul_dir }}"
 
-
 - name: Get Consul Zipfile
   get_url:
     url: "{{ consul_zip.url }}"
