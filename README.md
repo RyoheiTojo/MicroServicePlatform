@@ -4,9 +4,10 @@
 
 macOS
 ```
-brew install terraform-inventory
-brew install terraform
-brew install ansible
+$ brew install terraform-inventory
+$ brew install terraform
+$ brew install ansible
+$ ssh-keygen -t rsa
 ```
 
 ## Usage
