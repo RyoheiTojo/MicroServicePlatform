@@ -1,0 +1,4 @@
+---
+# defaults file for docker
+
+docker_control_user: "ec2-user"
