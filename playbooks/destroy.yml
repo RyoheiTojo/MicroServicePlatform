@@ -1,0 +1,10 @@
+- name: Destroy AWS server
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: Destroy resources by Terafform
+      terraform:
+        project_path: '../terraform/'
+        state: absent
+    
