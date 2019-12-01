@@ -1,0 +1,9 @@
+---
+# handlers file for consul
+
+- name: Restart Consul Service
+  systemd:
+    name: consul.service
+    state: restarted
+    daemon_reload: yes
+    enabled: yes

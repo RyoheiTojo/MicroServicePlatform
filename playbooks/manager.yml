@@ -2,4 +2,6 @@
   hosts: manager_server
   become: yes
   roles:
-    - docker
+    - role: docker
+    - role: consul
+      consul_server: True

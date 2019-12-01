@@ -1,0 +1,14 @@
+---
+# defaults file for consul
+
+consul_zip:
+  url: "https://releases.hashicorp.com/consul/1.6.2/consul_1.6.2_linux_amd64.zip"
+  checksum: "78d127e5b8edd310c3f9f89487fb833a5c7bcb4e09cb731a4d39100fc53b38be"
+
+consul_dir:
+  home: "/usr/local/consul"
+  bin: "/usr/local/consul/bin"
+  config: "/usr/local/consul/etc"
+  data: "/usr/local/consul/data"
+
+systemd_config_dir: "/etc/systemd/system"

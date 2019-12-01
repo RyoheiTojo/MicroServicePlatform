@@ -1,0 +1,12 @@
+{
+{% if consul_server %}
+  "server": true,
+  "ui": true,
+  "bootstrap_expect": {{ groups['manager_server'] | length }},
+  "client_addr": "{{ ansible_eth0.ipv4.address }}",
+{% endif %}
+  "bind_addr": "{{ ansible_eth0.ipv4.address }}",
+  "advertise_addr": "{{ ansible_eth0.ipv4.address }}",
+  "data_dir": "{{ consul_dir.data }}",
+  "retry_join": ["{{ groups['manager_server']| map('extract', hostvars, ['ansible_eth0', 'ipv4', 'address'])| join('","')  }}"]
+}
