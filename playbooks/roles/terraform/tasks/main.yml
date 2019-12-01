@@ -1,0 +1,13 @@
+---
+# tasks file for terraform
+
+- name: Create resources by Terafform
+  terraform:
+    project_path: './roles/terraform/files/'
+    force_init: yes
+    state: present
+    state_file: "{{ inventory_dir }}/terraform.tfstate"
+  register: terraform
+
+- name: Refresh Inventory
+  meta: refresh_inventory

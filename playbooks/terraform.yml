@@ -1,0 +1,32 @@
+- name: Terraform AWS server
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: Create resources by Terafform
+      terraform:
+        project_path: '../terraform/'
+        force_init: yes
+        state: present
+      register: terraform
+    
+    - name: Refresh Inventory
+      meta: refresh_inventory
+
+    - debug:
+        msg: "{{ item }} in processing"
+      with_inventory_hostnames:
+        - all
+
+    - wait_for:
+        host: "{{ item }}"
+        port: 22
+        state: started
+      with_inventory_hostnames:
+        - all
+
+- name: Setup Infra Common Setting
+  hosts: all
+  become: yes
+  roles:
+    - infra 

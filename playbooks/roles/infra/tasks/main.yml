@@ -1,0 +1,12 @@
+---
+# tasks file for terraform
+
+- name: Assign hostname
+  hostname:
+    name: "{{ group_names | select('match', '^name_.*') | list | first | regex_replace('^name_', '') }}"
+
+- name: Update to latest
+  yum:
+    name: '*'
+    state: latest
+
