@@ -2,8 +2,6 @@
   hosts: manager_server
   become: yes
   tasks:
-    - debug:
-        msg: "{{ groups['manager_server']| map('extract', hostvars, ['ansible_eth0', 'ipv4', 'address'])| join('\",\"')  }}"
   roles:
     - role: docker
     - role: consul
