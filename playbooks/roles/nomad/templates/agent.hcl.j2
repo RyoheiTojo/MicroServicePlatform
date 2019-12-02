@@ -1,0 +1,37 @@
+# Increase log verbosity
+log_level = "DEBUG"
+
+# Setup data dir
+data_dir = "{{ nomad_dir.data }}"
+
+{% if nomad_server %}
+# Enable the server
+server {
+    enabled = true
+
+    # Self-elect, should be 3 or 5 for production
+    bootstrap_expect = {{ groups['manager_server'] | length }}
+}
+
+server_join {
+    retry_join = ["{{ groups['manager_server']| map('extract', hostvars, ['ansible_eth0', 'ipv4', 'address'])| join('","')  }}"]
+
+}
+
+consul {
+    address = "{{ ansible_eth0.ipv4.address }}:8500"
+}
+{% else %}
+# Give the agent a unique name. Defaults to hostname
+name = "{{ inventory_hostname }}"
+
+# Enable the client
+client {
+    enabled = true
+
+    # For demo assume we are talking to server1. For production,
+    # this should be like "nomad.service.consul:4647" and a system
+    # like Consul used for service discovery.
+    servers = ["{{ groups['manager_server']| map('extract', hostvars, ['ansible_eth0', 'ipv4', 'address'])| join('","')  }}"]
+}
+{% endif %}

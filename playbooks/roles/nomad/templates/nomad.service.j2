@@ -1,0 +1,12 @@
+[Unit]
+Description={% if nomad_server %}Nomad server{% else %}Nomad Client{% endif %}
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart= /bin/sh -c "{{ nomad_dir.bin }}/nomad agent -config={{ nomad_dir.config }}/agent.hcl -bind={{ ansible_eth0.ipv4.address }}"
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

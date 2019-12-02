@@ -1,3 +1,7 @@
+data "http" "myip" {
+    url = "http://ipv4.icanhazip.com"
+}
+
 variable "access_key" {}
 variable "secret_key" {}
 variable "region" {
@@ -14,7 +18,7 @@ variable "images" {
 
 variable "server_count" {
     default = {
-        manager_server = 1
+        manager_server = 3
         application_server = 1
     }
 }
@@ -43,6 +47,26 @@ resource "aws_key_pair" "auth" {
     public_key = file(var.public_key_path)
 }
 
+resource "aws_security_group_rule" "inbound_consul" {
+    type = "ingress"
+    from_port = 8500
+    to_port = 8500
+    protocol = "tcp"
+    cidr_blocks = ["${chomp(data.http.myip.body)}/32"]
+
+    security_group_id = aws_security_group.score_hub_sg.id
+}
+
+resource "aws_security_group_rule" "inbound_nomad" {
+    type = "ingress"
+    from_port = 4646
+    to_port = 4646
+    protocol = "tcp"
+    cidr_blocks = ["${chomp(data.http.myip.body)}/32"]
+
+    security_group_id = aws_security_group.score_hub_sg.id
+}
+
 resource "aws_security_group_rule" "inbound_ssh" {
     type = "ingress"
     from_port = 22
@@ -63,6 +87,16 @@ resource "aws_security_group_rule" "inbound_http" {
     security_group_id = aws_security_group.score_hub_sg.id
 }
 
+resource "aws_security_group_rule" "inbound_any_from_self" {
+    type = "ingress"
+    from_port = 0
+    to_port = 0
+    protocol = -1
+    self = true
+
+    security_group_id = aws_security_group.score_hub_sg.id
+}
+
 resource "aws_security_group_rule" "outbound_http" {
     type = "egress"
     from_port = 80
@@ -79,6 +113,16 @@ resource "aws_security_group_rule" "outbound_https" {
     to_port = 443
     protocol = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+
+    security_group_id = aws_security_group.score_hub_sg.id
+}
+
+resource "aws_security_group_rule" "outbound_any_to_self" {
+    type = "egress"
+    from_port = 0
+    to_port = 0
+    protocol = -1
+    self = true
 
     security_group_id = aws_security_group.score_hub_sg.id
 }

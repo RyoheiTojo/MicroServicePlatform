@@ -1,0 +1,53 @@
+---
+# tasks file for nomad
+
+- name: Create Directory
+  file:
+    path: "{{ item.value }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  with_dict: "{{ nomad_dir }}"
+
+- name: Get Nomad Zipfile
+  get_url:
+    url: "{{ nomad_zip.url }}"
+    dest: /tmp/nomad.zip
+    sha256sum: "{{ nomad_zip.checksum }}"
+
+- name: Unarchive nomad zip
+  unarchive:
+    remote_src: yes
+    src: /tmp/nomad.zip
+    dest: "{{ nomad_dir.bin }}"
+
+- name: Distribute Nomad Config
+  template:
+    src: ../templates/agent.hcl.j2
+    dest: "{{ nomad_dir.config }}/agent.hcl"
+  notify: Restart Nomad Service
+
+- name: Distribute Nomad Service Config
+  template:
+    src: ../templates/nomad.service.j2
+    dest: "{{ systemd_config_dir }}/nomad.service"
+  notify: Restart Nomad Service
+
+- name: Set Nomad bin path
+  blockinfile:
+    path: /etc/bashrc
+    backup: yes
+    insertbefore: EOF
+    marker: "# {mark} Ansible Nomad bin path setting"
+    block: |
+      export PATH=$PATH:{{ nomad_dir.bin }}
+
+- name: Set Nomad Cli Target
+  blockinfile:
+    path: /etc/bashrc
+    backup: yes
+    insertbefore: EOF
+    marker: "# {mark} Ansible Nomad cli setting"
+    block: |
+      export NOMAD_ADDR=http://{{ ansible_eth0.ipv4.address }}:4646

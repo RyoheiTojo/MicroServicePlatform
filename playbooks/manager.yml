@@ -1,0 +1,10 @@
+- name: Setup Management Servers
+  hosts: manager_server
+  become: yes
+  tasks:
+  roles:
+    - role: docker
+    - role: consul
+      consul_server: True
+    - role: nomad
+      nomad_server: True

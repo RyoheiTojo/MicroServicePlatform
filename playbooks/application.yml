@@ -1,0 +1,13 @@
+- name: Gathering Facts
+  hosts: manager_server
+  tasks: []
+
+- name: Setup Application Servers
+  hosts: application_server
+  become: yes
+  roles:
+    - role: docker
+    - role: consul
+      consul_server: False
+    - role: nomad
+      nomad_server: False

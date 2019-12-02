@@ -1,0 +1,54 @@
+---
+# tasks file for consul
+
+- name: Create Directory
+  file:
+    path: "{{ item.value }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  with_dict: "{{ consul_dir }}"
+
+- name: Get Consul Zipfile
+  get_url:
+    url: "{{ consul_zip.url }}"
+    dest: /tmp/consul.zip
+    sha256sum: "{{ consul_zip.checksum }}"
+
+- name: Unarchive consul zip
+  unarchive:
+    remote_src: yes
+    src: /tmp/consul.zip
+    dest: "{{ consul_dir.bin }}"
+
+- name: Distribute Consul Config
+  template:
+    src: ../templates/agent.json.j2
+    dest: "{{ consul_dir.config }}/agent.json"
+  notify: Restart Consul Service
+
+- name: Distribute Consul Service Config
+  template:
+    src: ../templates/consul.service.j2
+    dest: "{{ systemd_config_dir }}/consul.service"
+  notify: Restart Consul Service
+
+- name: Set Consul bin path
+  blockinfile:
+    path: /etc/bashrc
+    backup: yes
+    insertbefore: EOF
+    marker: "# {mark} Ansible Consul bin path setting"
+    block: |
+      export PATH=$PATH:{{ consul_dir.bin }}
+
+- name: Set Consul Cli Target
+  blockinfile:
+    path: /etc/bashrc
+    backup: yes
+    insertbefore: EOF
+    marker: "# {mark} Ansible Consul cli setting"
+    block: |
+      export CONSUL_HTTP_ADDR={{ ansible_eth0.ipv4.address }}:8500
+  when: consul_server == True
