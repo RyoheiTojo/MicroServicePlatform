@@ -3,31 +3,23 @@
 
 - name: Get target HCL
   set_fact: 
-    targetHCL: "{{ lookup('url', 'https://raw.githubusercontent.com/RyoheiTojo/NomadJob/master/Sample/sample_counter.hcl', split_lines=False) | to_json }}"
+    targetHCL: "{{ lookup('url', target_hcl, split_lines=False) | to_json }}"
 
 - name: Convert HCL to JSON
   uri:
-    url: http://54.250.195.154:4646/v1/jobs/parse
+    url: "http://{{ manager_addr }}:4646/v1/jobs/parse"
     method: POST
     body: "{{ lookup('template', '../templates/hcl2json.json.j2') }}"
     body_format: json
   register: convert_result
 
-- name: debug
-  debug: msg="{{ convert_result }}"
-
 - name: Set NomadJob JSON variable
   set_fact: 
     targetJSON: "{{ convert_result.json }}"
 
-- name: output debug
-  copy:
-    content: "{{ lookup('template', '../templates/createjob.json.j2') }}"
-    dest: ./test.txt
-
 - name: Create Nomad Job
   uri:
-    url: http://54.250.195.154:4646/v1/jobs
+    url: "http://{{ manager_addr }}:4646/v1/jobs"
     method: POST
     body: "{{ lookup('template', '../templates/createjob.json.j2') }}"
     body_format: json
