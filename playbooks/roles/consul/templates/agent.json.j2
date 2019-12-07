@@ -8,5 +8,11 @@
   "bind_addr": "{{ ansible_eth0.ipv4.address }}",
   "advertise_addr": "{{ ansible_eth0.ipv4.address }}",
   "data_dir": "{{ consul_dir.data }}",
-  "retry_join": ["{{ groups['manager_server']| map('extract', hostvars, ['ansible_eth0', 'ipv4', 'address'])| join('","')  }}"]
+  "retry_join": ["{{ groups['manager_server']| map('extract', hostvars, ['ansible_eth0', 'ipv4', 'address'])| join('","')  }}"],
+  "ports": {
+    "grpc": 8502
+  },
+  "connect": {
+    "enabled": true
+  }
 }

@@ -7,7 +7,7 @@ consul_zip:
 
 consul_dir:
   home: "/usr/local/consul"
-  bin: "/usr/local/consul/bin"
+  bin: "/usr/local/bin"
   config: "/usr/local/consul/etc"
   data: "/usr/local/consul/data"
 
