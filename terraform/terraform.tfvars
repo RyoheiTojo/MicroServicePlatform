@@ -20,5 +20,8 @@ public_key_path = "~/.ssh/id_rsa.pub"
 
 #Segment Settings
 root_segment = "10.10.0.0/16"
-public_segment = "10.10.10.0/24"
-private_segment = "10.10.11.0/24"
+public_segment1 = "10.10.10.0/24"
+public_segment2 = "10.10.11.0/24"
+private_segment = "10.10.12.0/24"
+availability_zone1 = "ap-northeast-1a"
+availability_zone2 = "ap-northeast-1c"

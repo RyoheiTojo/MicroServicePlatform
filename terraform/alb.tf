@@ -29,5 +29,5 @@ resource "aws_lb" "main" {
   name               = "scorehub-alb"
 
   security_groups = ["${aws_security_group.score_hub_alb_sg.id}"]
-  subnets         = ["${aws_subnet.vpc_main-public-subnet.id}"]
+  subnets         = ["${aws_subnet.vpc_main-public1-subnet.id}", "${aws_subnet.vpc_main-public2-subnet.id}"]
 }
