@@ -5,6 +5,6 @@
   tasks:
     - name: Destroy resources by Terafform
       terraform:
-        project_path: '../terraform/'
+        project_path: '../../terraform/'
         state: absent
     
