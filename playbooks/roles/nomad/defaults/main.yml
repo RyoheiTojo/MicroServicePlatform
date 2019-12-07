@@ -5,10 +5,17 @@ nomad_zip:
   url: "https://releases.hashicorp.com/nomad/0.10.1/nomad_0.10.1_linux_amd64.zip"
   checksum: "d1eecf0880a456cc9c171f90076f286d8b785b13b96cb49602ac5f760c559b2a"
 
+cni_plugins:
+  url: "https://github.com/containernetworking/plugins/releases/download/v0.8.3/cni-plugins-linux-amd64-v0.8.3.tgz"
+  checksum: "29a092bef9cb6f26c8d5340f3d56567b62c7ebdb1321245d94b1842c80ba20ba"
+
 nomad_dir:
   home: "/usr/local/nomad"
   bin: "/usr/local/nomad/bin"
   config: "/usr/local/nomad/etc"
   data: "/usr/local/nomad/data"
+  cni: "/opt/cni/bin"
 
 systemd_config_dir: "/etc/systemd/system"
+sysctl_config_dir: "/etc/sysctl.d"
+bridge_config_dir: "/proc/sys/net/bridge"
