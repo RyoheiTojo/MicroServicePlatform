@@ -16,6 +16,7 @@ build
 $ export TF_VAR_access_key=<AWS Access Key>
 $ export TF_VAR_secret_key=<AWS Secret Key>
 $ export ANSIBLE_HOST_KEY_CHECKING=False
+$ export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 $ ansible-playbook --inventory-file=./terraform/ec2.sh playbooks/terraform.yml -u ec2-user
 ```
 
