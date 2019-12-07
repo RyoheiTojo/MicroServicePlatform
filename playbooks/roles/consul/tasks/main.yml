@@ -34,15 +34,6 @@
     dest: "{{ systemd_config_dir }}/consul.service"
   notify: Restart Consul Service
 
-- name: Set Consul bin path
-  blockinfile:
-    path: /etc/bashrc
-    backup: yes
-    insertbefore: EOF
-    marker: "# {mark} Ansible Consul bin path setting"
-    block: |
-      export PATH=$PATH:{{ consul_dir.bin }}
-
 - name: Set Consul Cli Target
   blockinfile:
     path: /etc/bashrc
