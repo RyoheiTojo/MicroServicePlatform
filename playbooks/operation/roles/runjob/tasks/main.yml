@@ -7,7 +7,7 @@
 
 - name: Convert HCL to JSON
   uri:
-    url: "http://{{ manager_addr }}:4646/v1/jobs/parse"
+    url: "http://{{ (groups['manager_server'] | list )[0] }}:4646/v1/jobs/parse"
     method: POST
     body: "{{ lookup('template', '../templates/hcl2json.json.j2') }}"
     body_format: json
@@ -19,7 +19,7 @@
 
 - name: Create Nomad Job
   uri:
-    url: "http://{{ manager_addr }}:4646/v1/jobs"
+    url: "http://{{ (groups['manager_server'] | list )[0] }}:4646/v1/jobs"
     method: POST
     body: "{{ lookup('template', '../templates/createjob.json.j2') }}"
     body_format: json
