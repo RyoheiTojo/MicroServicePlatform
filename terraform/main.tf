@@ -19,7 +19,7 @@ variable "images" {
 variable "server_count" {
     default = {
         manager_server = 3
-        application_server = 1
+        application_server = 2
     }
 }
 

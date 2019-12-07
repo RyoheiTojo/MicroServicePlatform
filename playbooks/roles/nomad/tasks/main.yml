@@ -22,6 +22,32 @@
     src: /tmp/nomad.zip
     dest: "{{ nomad_dir.bin }}"
 
+- name: Get CNI Plugins tgz
+  get_url:
+    url: "{{ cni_plugins.url }}"
+    dest: /tmp/cni_plugins.tgz
+    sha256sum: "{{ cni_plugins.checksum }}"
+
+- name: Unarchive CNI Plugins tgz
+  unarchive:
+    remote_src: yes
+    src: /tmp/cni_plugins.tgz
+    dest: "{{ nomad_dir.cni }}"
+
+- name: Distribute cni Config
+  copy:
+    src: "../files/{{ item }}"
+    dest: "{{ bridge_config_dir }}/{{ item }}"
+  with_items:
+    - bridge-nf-call-arptables
+    - bridge-nf-call-ip6tables
+    - bridge-nf-call-iptables
+
+- name: Distribute sysctl Config
+  copy:
+    src: ../files/50-nomad.conf
+    dest: "{{ sysctl_config_dir }}/50-nomad.conf"
+
 - name: Distribute Nomad Config
   template:
     src: ../templates/agent.hcl.j2
