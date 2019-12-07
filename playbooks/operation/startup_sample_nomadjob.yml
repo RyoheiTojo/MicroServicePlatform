@@ -1,0 +1,14 @@
+- name: Gathering Facts
+  hosts: manager_server
+  tasks: []
+
+- name: Startup NomadJob
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+  roles:
+    - role: runjob
+      target_hcl: "https://raw.githubusercontent.com/RyoheiTojo/NomadJob/master/Sample/sample_counter.hcl"
+    - role: runjob
+      target_hcl: "https://raw.githubusercontent.com/RyoheiTojo/NomadJob/master/Sample/sample_dashboard.hcl"
