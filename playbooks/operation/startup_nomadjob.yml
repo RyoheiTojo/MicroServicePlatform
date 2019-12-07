@@ -1,0 +1,7 @@
+- name: Startup NomadJob
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+  roles:
+    - role: runjob
